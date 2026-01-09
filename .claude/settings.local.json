@@ -65,7 +65,10 @@
       "Bash(exit 1)",
       "Bash(if timeout 2 curl -s http://localhost:300)",
       "Bash(pnpm test:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(pnpm update:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm remove:*)"
     ]
   }
 }
