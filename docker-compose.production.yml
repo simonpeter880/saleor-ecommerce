@@ -1,0 +1,193 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: saleor-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-saleor}
+      POSTGRES_USER: ${POSTGRES_USER:-saleor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - saleor_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-saleor}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: saleor-redis
+    restart: always
+    networks:
+      - saleor_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Saleor Backend API
+  saleor-api:
+    build:
+      context: ./saleor
+      dockerfile: Dockerfile
+    container_name: saleor-api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-saleor}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-saleor}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      SECRET_KEY: ${SECRET_KEY}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      DEBUG: "False"
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+      EMAIL_URL: ${EMAIL_URL}
+      JAEGER_AGENT_HOST: ${JAEGER_AGENT_HOST:-}
+      STATIC_URL: /static/
+      AWS_MEDIA_BUCKET_NAME: ${AWS_MEDIA_BUCKET_NAME:-}
+      AWS_MEDIA_CUSTOM_DOMAIN: ${AWS_MEDIA_CUSTOM_DOMAIN:-}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      # Google OAuth settings
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+    volumes:
+      - saleor_media:/app/media
+      - saleor_static:/app/static
+    networks:
+      - saleor_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/').read()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Celery Worker
+  celery-worker:
+    build:
+      context: ./saleor
+      dockerfile: Dockerfile
+    container_name: saleor-celery-worker
+    restart: always
+    command: celery -A saleor.celeryconf:app worker --loglevel=info
+    depends_on:
+      - postgres
+      - redis
+      - saleor-api
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-saleor}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-saleor}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      SECRET_KEY: ${SECRET_KEY}
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+      EMAIL_URL: ${EMAIL_URL}
+    volumes:
+      - saleor_media:/app/media
+    networks:
+      - saleor_network
+
+  # Celery Beat (Scheduled Tasks)
+  celery-beat:
+    build:
+      context: ./saleor
+      dockerfile: Dockerfile
+    container_name: saleor-celery-beat
+    restart: always
+    command: celery -A saleor.celeryconf:app beat --loglevel=info
+    depends_on:
+      - postgres
+      - redis
+      - saleor-api
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-saleor}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-saleor}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      SECRET_KEY: ${SECRET_KEY}
+    networks:
+      - saleor_network
+
+  # Storefront Frontend
+  storefront:
+    build:
+      context: ./storefront
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SALEOR_API_URL: ${NEXT_PUBLIC_SALEOR_API_URL}
+        NEXT_PUBLIC_STOREFRONT_URL: ${NEXT_PUBLIC_STOREFRONT_URL}
+        NEXT_PUBLIC_DEFAULT_CHANNEL: ${NEXT_PUBLIC_DEFAULT_CHANNEL:-default-channel}
+    container_name: saleor-storefront
+    restart: always
+    depends_on:
+      - saleor-api
+    environment:
+      NEXT_PUBLIC_SALEOR_API_URL: ${NEXT_PUBLIC_SALEOR_API_URL}
+      NEXT_PUBLIC_STOREFRONT_URL: ${NEXT_PUBLIC_STOREFRONT_URL}
+      NEXT_PUBLIC_DEFAULT_CHANNEL: ${NEXT_PUBLIC_DEFAULT_CHANNEL:-default-channel}
+    networks:
+      - saleor_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: saleor-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - saleor_static:/var/www/static:ro
+      - saleor_media:/var/www/media:ro
+      - certbot_conf:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
+    depends_on:
+      - saleor-api
+      - storefront
+    networks:
+      - saleor_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Certbot for SSL certificates
+  certbot:
+    image: certbot/certbot
+    container_name: saleor-certbot
+    volumes:
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+volumes:
+  postgres_data:
+  saleor_media:
+  saleor_static:
+  certbot_conf:
+  certbot_www:
+
+networks:
+  saleor_network:
+    driver: bridge

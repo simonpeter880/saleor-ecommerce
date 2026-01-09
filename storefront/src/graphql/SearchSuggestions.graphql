@@ -1,0 +1,38 @@
+query SearchSuggestions($search: String!, $channel: String!, $first: Int = 6) {
+	products(first: $first, channel: $channel, filter: { search: $search }) {
+		edges {
+			node {
+				id
+				name
+				slug
+				thumbnail(size: 64, format: WEBP) {
+					url
+					alt
+				}
+				category {
+					name
+					slug
+				}
+				pricing {
+					priceRange {
+						start {
+							gross {
+								amount
+								currency
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	categories(first: 3, filter: { search: $search }) {
+		edges {
+			node {
+				id
+				name
+				slug
+			}
+		}
+	}
+}

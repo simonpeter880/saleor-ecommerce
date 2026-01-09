@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="#FB7701"/>
+
+  <!-- Lightning bolt icon for electronics -->
+  <path d="M256 64L128 256H256L256 448L384 256H256L256 64Z" fill="white"/>
+
+  <!-- TH letters -->
+  <text x="256" y="350" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">TH</text>
+</svg>
