@@ -84,7 +84,8 @@
       "Bash(wc:*)",
       "Bash(git checkout:*)",
       "Bash(npm remove:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npx graphql-codegen:*)"
     ]
   }
 }

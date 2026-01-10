@@ -13,7 +13,15 @@ query ProductDetails($slug: String!, $channel: String!) {
 		category {
 			id
 			name
+			slug
 		}
+		media {
+			id
+			url
+			alt
+			type
+		}
+		rating
 		variants {
 			...VariantDetails
 		}

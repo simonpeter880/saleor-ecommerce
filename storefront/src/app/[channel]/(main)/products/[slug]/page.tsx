@@ -133,7 +133,7 @@ export default async function Page(props: {
 		category: product.category,
 		pricing: product.pricing,
 		rating: product.rating,
-		reviews: product.reviews,
+		// reviews are fetched separately via API in ProductReviewsInline component
 	};
 
 	const productJsonLd: WithContext<Product> = {
