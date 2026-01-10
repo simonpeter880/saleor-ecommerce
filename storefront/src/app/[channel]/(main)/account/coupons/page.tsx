@@ -1,4 +1,4 @@
-import { Ticket, Clock, Copy, AlertCircle } from "lucide-react";
+import { Ticket, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { requireAuth } from "@/lib/auth-utils";
 
@@ -7,49 +7,39 @@ export const metadata = {
 	description: "View and use your available coupon codes",
 };
 
-// GraphQL query for vouchers
-const VouchersDocument = `
-  query Vouchers($channel: String!) {
-    vouchers(first: 100, channel: $channel) {
-      edges {
-        node {
-          id
-          code
-          name
-          type
-          discountValueType
-          discountValue
-          minCheckoutItemsQuantity
-          startDate
-          endDate
-          used
-          usageLimit
-          applyOncePerOrder
-        }
-      }
-    }
-  }
-`;
+// GraphQL query for vouchers (currently unused - hardcoded mock data below)
+// const VouchersDocument = `
+//   query Vouchers($channel: String!) {
+//     vouchers(first: 100, channel: $channel) {
+//       edges {
+//         node {
+//           id
+//           code
+//           name
+//           type
+//           discountValueType
+//           discountValue
+//           minCheckoutItemsQuantity
+//           startDate
+//           endDate
+//           used
+//           usageLimit
+//           applyOncePerOrder
+//         }
+//       }
+//     }
+//   }
+// `;
 
 export default async function CouponsPage(props: { params: Promise<{ channel: string }> }) {
 	const params = await props.params;
 
 	// Require authentication
-	const user = await requireAuth(params.channel, "/account/coupons");
+	await requireAuth(params.channel, "/account/coupons");
 
 	// Note: Saleor's voucher system is typically admin-managed
 	// User-specific vouchers would need custom implementation
 	// For now, show informational message about using vouchers at checkout
-
-	const availableVouchers = [
-		{
-			id: "info",
-			code: "ENTER_AT_CHECKOUT",
-			name: "Coupon Codes",
-			description: "Apply coupon codes during checkout",
-			type: "info",
-		},
-	];
 
 	return (
 		<div className="bg-gray-50 min-h-screen py-8">

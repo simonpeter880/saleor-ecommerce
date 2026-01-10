@@ -47,6 +47,15 @@ log_info "Setting up SSL certificates for: $DOMAIN_NAME"
 # Create SSL directory
 mkdir -p nginx/ssl
 
+# Generate Diffie-Hellman parameters for enhanced security
+log_info "Generating Diffie-Hellman parameters (this may take a few minutes)..."
+if [ ! -f nginx/ssl/dhparam.pem ]; then
+    openssl dhparam -out nginx/ssl/dhparam.pem 2048
+    log_info "Diffie-Hellman parameters generated"
+else
+    log_info "Diffie-Hellman parameters already exist, skipping..."
+fi
+
 # First, create self-signed certificates for initial setup
 log_info "Creating temporary self-signed certificates..."
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \

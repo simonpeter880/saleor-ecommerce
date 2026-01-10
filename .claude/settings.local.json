@@ -68,7 +68,21 @@
       "Bash(git init:*)",
       "Bash(pnpm update:*)",
       "Bash(pnpm add:*)",
-      "Bash(pnpm remove:*)"
+      "Bash(pnpm remove:*)",
+      "Bash(sudo apt update:*)",
+      "Bash(sudo apt install:*)",
+      "Bash(pnpm build:*)",
+      "Bash(npm --version:*)",
+      "Bash(ssh:*)",
+      "Bash(ping:*)",
+      "Bash(rsync:*)",
+      "Bash(scp:*)",
+      "Bash(\"]\nEOF\ncat /opt/saleor/saleor-dashboard/Dockerfile\")",
+      "Bash(git clone:*)",
+      "Bash(tee:*)",
+      "Bash(sudo netstat:*)",
+      "Bash(wc:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }

@@ -5,7 +5,6 @@ import {
 	Provider as UrqlProvider,
 	cacheExchange,
 	createClient,
-	dedupExchange,
 	fetchExchange,
 } from "urql";
 
@@ -26,7 +25,7 @@ export const Root = ({ saleorApiUrl }: { saleorApiUrl: string }) => {
 			suspense: true,
 			requestPolicy: "cache-first",
 			fetch: (input, init) => saleorAuthClient.fetchWithAuth(input as NodeJS.fetch.RequestInfo, init),
-			exchanges: [dedupExchange, cacheExchange, fetchExchange],
+			exchanges: [cacheExchange, fetchExchange],
 		});
 
 	const [urqlClient, setUrqlClient] = useState<Client>(makeUrqlClient());

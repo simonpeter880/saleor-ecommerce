@@ -1,5 +1,7 @@
 // @ts-nocheck
-import AdyenCheckout from "@adyen/adyen-web";
+import * as AdyenWeb from "@adyen/adyen-web";
+
+const AdyenCheckout = AdyenWeb.default || AdyenWeb;
 import { type CardElementData } from "@adyen/adyen-web/dist/types/components/Card/types";
 import type DropinElement from "@adyen/adyen-web/dist/types/components/Dropin";
 import { PaymentResponse as AdyenApiPaymentResponse } from "@adyen/api-library/lib/src/typings/checkout/paymentResponse";
