@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 import { TemuFooter } from "@/ui/components/TemuFooter";
 import { TemuHeaderWrapper } from "@/ui/components/TemuHeaderWrapper";
-import { SpinWheelTrigger } from "@/ui/components/SpinWheelTrigger";
 import { PromoPopup } from "@/ui/components/PromoPopup";
 import { SkipToContent } from "@/ui/components/SkipToContent";
 import { PWAInstallButton } from "@/ui/components/PWAInstallButton";
@@ -27,7 +26,6 @@ export default async function RootLayout(props: {
 				</main>
 				<TemuFooter channel={channel} />
 			</div>
-			<SpinWheelTrigger />
 			<PromoPopup channel={channel} />
 			<PWAInstallButton />
 		</>

@@ -37,7 +37,6 @@ import { ProductReviewsInline } from "./ProductReviewsInline";
 import { Toast, useToast } from "./Toast";
 
 // Lazy load heavy components for better performance
-const ProductComparisonTool = lazy(() => import("./ProductComparisonTool"));
 const ProductQASection = lazy(() => import("./ProductQASection"));
 
 interface ProductImage {
@@ -113,7 +112,6 @@ export function TemuProductPage({
 	const [isAddingToCart, setIsAddingToCart] = useState(false);
 	const [showSizeGuide, setShowSizeGuide] = useState(false);
 	const [showImageZoom, setShowImageZoom] = useState(false);
-	const [showComparison, setShowComparison] = useState(false);
 	const [timeLeft, setTimeLeft] = useState({ hours: 12, minutes: 34, seconds: 56 });
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const { toasts, success, error, removeToast } = useToast();
@@ -647,32 +645,6 @@ export function TemuProductPage({
 							</div>
 						)}
 					</div>
-				</div>
-
-				{/* Comparison Tool Button */}
-				<div className="mb-8">
-					<button
-						onClick={() => setShowComparison(!showComparison)}
-						className="w-full sm:w-auto px-6 py-3 bg-gray-900 text-white rounded-lg font-bold hover:bg-gray-800 transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
-					>
-						<Scale size={20} />
-						{showComparison ? "Hide" : "Compare with Similar Products"}
-					</button>
-					{showComparison && (
-						<div className="mt-6 animate-fadeIn">
-							<Suspense fallback={
-								<div className="flex items-center justify-center py-12 bg-white rounded-xl">
-									<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-temu-500"></div>
-								</div>
-							}>
-								<ProductComparisonTool
-									currentProduct={product}
-									channel={channel}
-									categorySlug={product.category?.slug}
-								/>
-							</Suspense>
-						</div>
-					)}
 				</div>
 
 			</div>
