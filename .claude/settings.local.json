@@ -82,7 +82,8 @@
       "Bash(tee:*)",
       "Bash(sudo netstat:*)",
       "Bash(wc:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npm remove:*)"
     ]
   }
 }

@@ -68,14 +68,6 @@ const config = {
 		],
 	},
 	typedRoutes: false,
-	typescript: {
-		// Temporarily ignore TypeScript errors to allow build
-		ignoreBuildErrors: true,
-	},
-	eslint: {
-		// Temporarily ignore ESLint errors to allow build
-		ignoreDuringBuilds: true,
-	},
 	// used in the Dockerfile
 	output:
 		process.env.NEXT_OUTPUT === "standalone"
