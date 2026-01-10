@@ -83,7 +83,8 @@
       "Bash(sudo netstat:*)",
       "Bash(wc:*)",
       "Bash(git checkout:*)",
-      "Bash(npm remove:*)"
+      "Bash(npm remove:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }
