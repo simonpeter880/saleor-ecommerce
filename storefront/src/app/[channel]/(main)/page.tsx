@@ -1,11 +1,11 @@
 import { ProductListByCollectionDocument, ProductListDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
-import { TemuHomepage } from "@/ui/components/TemuHomepage";
+import { Homepage } from "@/components/home/Homepage";
 
 export const metadata = {
-	title: "TechHub Electronics - Shop Like a Billionaire | Unbeatable Deals",
+	title: "TechHub Electronics - Quality Electronics at Great Prices",
 	description:
-		"Incredible deals on electronics. Save up to 90% on smartphones, laptops, tablets, gaming consoles. Free shipping on orders over $50. Shop now!",
+		"Shop the latest smartphones, laptops, tablets, gaming consoles and more from trusted brands. Free shipping on orders over $50. 30-day returns.",
 };
 
 export default async function Page(props: { params: Promise<{ channel: string }> }) {
@@ -38,5 +38,5 @@ export default async function Page(props: { params: Promise<{ channel: string }>
 		return null;
 	}
 
-	return <TemuHomepage products={products} channel={params.channel} />;
+	return <Homepage products={products} channel={params.channel} />;
 }
