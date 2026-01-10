@@ -16,7 +16,7 @@ export async function generateMetadata(
 		params: Promise<{ slug: string; channel: string }>;
 		searchParams: Promise<{ variant?: string }>;
 	},
-	parent: ResolvingMetadata,
+	_parent: ResolvingMetadata,
 ): Promise<Metadata> {
 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
 

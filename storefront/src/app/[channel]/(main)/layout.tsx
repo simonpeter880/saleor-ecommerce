@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { HeaderWrapper } from "@/components/layout/HeaderWrapper";
-import { PromoPopup } from "@/ui/components/PromoPopup";
 import { SkipToContent } from "@/ui/components/SkipToContent";
 import { PWAInstallButton } from "@/ui/components/PWAInstallButton";
 
