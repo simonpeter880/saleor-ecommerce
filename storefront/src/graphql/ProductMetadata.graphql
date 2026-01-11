@@ -1,9 +1,0 @@
-query ProductMetadata($id: ID!, $channel: String!) {
-	product(id: $id, channel: $channel) {
-		id
-		metadata {
-			key
-			value
-		}
-	}
-}

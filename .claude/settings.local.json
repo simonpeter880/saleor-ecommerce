@@ -96,7 +96,8 @@
       "Bash(npm install:*)",
       "Bash(pnpm:*)",
       "Bash(source \"$NVM_DIR/nvm.sh\")",
-      "Bash(source ~/.nvm/nvm.sh)"
+      "Bash(source ~/.nvm/nvm.sh)",
+      "Bash(tar czf:*)"
     ]
   }
 }

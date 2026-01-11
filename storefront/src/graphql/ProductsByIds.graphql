@@ -1,9 +1,0 @@
-query ProductsByIds($ids: [ID!]!, $channel: String!) {
-  products(first: 100, channel: $channel, filter: {ids: $ids}) {
-    edges {
-      node {
-        ...ProductListItem
-      }
-    }
-  }
-}
