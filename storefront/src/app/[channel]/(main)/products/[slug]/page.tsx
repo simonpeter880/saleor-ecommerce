@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { type ResolvingMetadata, type Metadata } from "next";
 import { invariant } from "ts-invariant";
 import { type WithContext, type Product } from "schema-dts";
-import { TemuProductWrapper } from "@/ui/components/TemuProductWrapper";
+import { ProductPage } from "@/components/product/ProductPage";
 import { RelatedProducts } from "@/ui/components/RelatedProducts";
 import { RecentlyViewedTracker } from "@/ui/components/RecentlyViewedTracker";
 import { Breadcrumb } from "@/ui/components/Breadcrumb";
@@ -189,11 +189,11 @@ export default async function Page(props: {
 				}}
 			/>
 			<Breadcrumb items={breadcrumbItems} channel={params.channel} />
-			<TemuProductWrapper
+			<ProductPage
 				product={productData}
 				channel={params.channel}
 				selectedVariant={activeVariant}
-				addToCartAction={addToCart}
+				onAddToCart={addToCart}
 			/>
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 				<RelatedProducts
