@@ -1,35 +1,13 @@
 "use client";
 
-import { ProductCard } from "@/ui/components/ProductCard";
+import { ProductElement } from "@/ui/components/ProductElement";
 import { RecentlyViewed } from "@/ui/components/RecentlyViewed";
 import { ShieldCheck, Truck, RefreshCw, HeadphonesIcon } from "lucide-react";
 import Link from "next/link";
-
-interface Product {
-	id: string;
-	name: string;
-	slug: string;
-	thumbnail?: {
-		url?: string;
-		alt?: string;
-	};
-	pricing?: {
-		priceRange?: {
-			start?: {
-				gross: {
-					amount: number;
-					currency: string;
-				};
-			};
-		};
-	};
-	category?: {
-		name: string;
-	};
-}
+import type { ProductListItemFragment } from "@/gql/graphql";
 
 interface HomepageProps {
-	products: Product[];
+	products: ProductListItemFragment[];
 	channel: string;
 }
 
@@ -146,8 +124,13 @@ export function Homepage({ products, channel }: HomepageProps) {
 
 				{/* Product Grid */}
 				<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-					{products.map((product) => (
-						<ProductCard key={product.id} product={product} channel={channel} />
+					{products.map((product, index) => (
+						<ProductElement
+						key={product.id}
+						product={product}
+						loading={index < 5 ? "eager" : "lazy"}
+						priority={index < 5}
+					/>
 					))}
 				</div>
 

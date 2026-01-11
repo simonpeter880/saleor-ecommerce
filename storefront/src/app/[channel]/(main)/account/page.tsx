@@ -12,7 +12,7 @@ export const metadata = {
 	description: "Manage your TechHub Electronics account, orders, and settings",
 };
 
-export default async function AccountPage(props: { params: Promise<{ channel: string }> }) {
+export default async function AccountPageRoute(props: { params: Promise<{ channel: string }> }) {
 	const params = await props.params;
 
 	// Require authentication - will redirect to login if not authenticated
