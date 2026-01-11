@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Loader } from "@/ui/atoms/Loader";
-import { TemuAccountPage } from "@/ui/components/TemuAccountPage";
+import { AccountPage } from "@/components/account/AccountPage";
 import { getUserOrders, getUserWishlist } from "@/app/account-queries";
 import { requireAuth } from "@/lib/auth-utils";
 
@@ -40,7 +40,7 @@ export default async function AccountPage(props: { params: Promise<{ channel: st
 
 	return (
 		<Suspense fallback={<Loader />}>
-			<TemuAccountPage
+			<AccountPage
 				channel={params.channel}
 				user={userData}
 				orders={orders}
