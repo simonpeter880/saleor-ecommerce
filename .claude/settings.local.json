@@ -97,7 +97,11 @@
       "Bash(pnpm:*)",
       "Bash(source \"$NVM_DIR/nvm.sh\")",
       "Bash(source ~/.nvm/nvm.sh)",
-      "Bash(tar czf:*)"
+      "Bash(tar czf:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(xargs:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)"
     ]
   }
 }
