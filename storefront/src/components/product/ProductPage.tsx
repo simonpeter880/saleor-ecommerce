@@ -81,7 +81,6 @@ interface ProductPageProps {
 
 export function ProductPage({
 	product,
-	channel,
 	selectedVariant,
 	onAddToCart,
 }: ProductPageProps) {

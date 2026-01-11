@@ -5,12 +5,10 @@ import {
 	User,
 	Package,
 	MapPin,
-	CreditCard,
 	Settings,
 	Heart,
 	LogOut,
 	ShoppingBag,
-	Clock,
 	Mail,
 	ChevronRight,
 	TrendingUp,
@@ -58,7 +56,6 @@ export function AccountPage({
 	user,
 	orders = [],
 	wishlist = [],
-	addresses,
 }: {
 	channel: string;
 	user: UserData | null;
